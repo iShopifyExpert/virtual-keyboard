@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <input class="keyboardinput" placeholder="Tap on the virtual keyboard to start" />
+      <div class="simple-keyboard"></div>
+    </div>
+  </div>
+</div>
+<style>
+   .keyboardinput {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    margin: 0 auto 15px;
+    text-align: center;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+{{ 'jquery.min.js' | asset_url | script_tag }}
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard-layouts@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
+<script>
+  $(document).ready(function() {
+    //Keyboard js
+    let Keyboard = window.SimpleKeyboard.default;
+    let KeyboardLayouts = window.SimpleKeyboardLayouts.default;
+    //Available Languages arabic, chinese, czech, english, french, german, hindi, italian, japanese, korean, russian, sindhi.js, spanish, thai, urdu
+    //const hebrew={default:["` 1 2 3 4 5 6 7 8 9 0 - = {bksp}","{tab} q w e r t y u i o p [ ] \\","{lock} a s d f g h j k l ; ' {enter}","{shift} z x c v b n m , . / {shift}",".com @ {space}"],shift:["~ ! @ # $ % ^ & * ( ) _ + {bksp}","{tab} Q W E R T Y U I O P { } |",'{lock} A S D F G H J K L : " {enter}',"{shift} Z X C V B N M < > ? {shift}",".com @ {space}"]};
+    let layout = new KeyboardLayouts().get('hebrew');
+    let myKeyboard = new Keyboard({
+      onChange: input => onChange(input),
+      onKeyPress: button => onKeyPress(button),
+      layout: layout
+    });
+    function onChange(input) {
+      document.querySelector(".keyboardinput").value = input;
+      console.log("Input changed", input);
+    }
+    function onKeyPress(button) {
+      console.log("Button pressed", button);
+    if (button === "{shift}" || button === "{lock}") handleShift();
+    }
+    function handleShift() {
+      let currentLayout = myKeyboard.options.layoutName;
+      let shiftToggle = currentLayout === "default" ? "shift" : "default";
+      myKeyboard.setOptions({
+        layoutName: shiftToggle
+      });
+    }
+  });
+</script>
